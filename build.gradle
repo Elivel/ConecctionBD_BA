@@ -1,0 +1,61 @@
+plugins {
+    id 'java'
+}
+
+group = 'com.conecctionbd'
+version = '1.0.0'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    cucumberVersion = '7.20.1'
+    junitVersion = '5.11.4'
+    seleniumVersion = '4.27.0'
+}
+
+dependencies {
+    implementation 'io.rest-assured:rest-assured:5.5.0'
+    implementation 'com.oracle.database.jdbc:ojdbc11:23.5.0.24.07'
+
+    testImplementation 'com.microsoft.playwright:playwright:1.49.0'
+    testImplementation "io.cucumber:cucumber-java:${cucumberVersion}"
+    testImplementation "io.cucumber:cucumber-junit-platform-engine:${cucumberVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+    testImplementation 'org.junit.platform:junit-platform-suite:1.11.4'
+
+    // Selenium + WebDriver manager para ejecutar pruebas UI con drivers locales.
+    testImplementation "org.seleniumhq.selenium:selenium-java:${seleniumVersion}"
+    testImplementation 'io.github.bonigarcia:webdrivermanager:5.9.2'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['api', 'config', 'conecction', 'model', 'repository', 'service', 'util']
+        }
+        resources {
+            srcDirs = ['resources']
+        }
+    }
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty 'cucumber.junit-platform.naming-strategy', 'long'
+}
